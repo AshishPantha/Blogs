@@ -4,6 +4,10 @@
     <a href="{% url 'post_edit' post.pk %}">Edit</a>
     <a href="{% url 'post_delete' post.pk %}">Delete</a>
     <h1>{{ post.title }}</h1>
+
+    {% if post.category %}
+        <p><strong>Category:</strong> {{ post.category }}</p>
+    {% endif %}
     <p>{{ post.content }}</p>
     <p><small>Posted on {{ post.created_at }} by {{ post.author }}</small></p>
 {% endblock %}
