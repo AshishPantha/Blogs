@@ -1,13 +1,35 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-    <a href="{% url 'post_edit' post.pk %}">Edit</a>
-    <a href="{% url 'post_delete' post.pk %}">Delete</a>
+    {% if post.author == user %}
+        <a href="{% url 'post_edit' post.pk %}">Edit</a>
+        <a href="{% url 'post_delete' post.pk %}">Delete</a>
+    {% endif %}
     <h1>{{ post.title }}</h1>
 
     {% if post.category %}
         <p><strong>Category:</strong> {{ post.category }}</p>
     {% endif %}
     <p>{{ post.content }}</p>
+    <h3>Comments</h3>
+    {% for comment in post.comments.all %}
+        <div class="comment">
+            <strong>{{ comment.author }}</strong> - {{ comment.created_at }}
+            <p>{{ comment.content }}</p>
+        </div>
+    {%empty %}
+        <p>No comments yet.</p>
+    {% endfor %}   
+    
+    {% if user.is_authenticated %}
+    <form method="post" action="{% url 'add_comment' post.pk %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Comment</button>
+    </form>
+    {%else %}
+    <p><a href="{% url 'login' %}">Log in</a> to leave a comment.</p>
+    {% endif %}
+        
     <p><small>Posted on {{ post.created_at }} by {{ post.author }}</small></p>
 {% endblock %}
