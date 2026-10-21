@@ -7,3 +7,4 @@ db.sqlite3
 .vscode/
 throwaway.txt
 progressLog.md
+staticfiles/
